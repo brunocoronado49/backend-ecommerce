@@ -6,7 +6,6 @@ export const bcryptAdapter = {
   // Crypt the password
   hash: (password: string) => {
     const salt = genSaltSync();
-
     return hashSync(password, salt);
   },
 

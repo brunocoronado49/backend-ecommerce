@@ -1,29 +1,29 @@
 // Custom errors from Error, each error displays in diferent status code
 export class CustomError extends Error {
   constructor(
-    public readonly message: string,
-    public readonly statusCode: number
+    public readonly statusCode: number,
+    public readonly message: string
   ) {
     super(message);
   }
 
   static badRequest(message: string): CustomError {
-    return new CustomError(message, 400);
+    return new CustomError(400, message);
   }
 
   static unauthorized(message: string): CustomError {
-    return new CustomError(message, 401);
+    return new CustomError(401, message);
   }
 
   static forbidden(message: string): CustomError {
-    return new CustomError(message, 403);
+    return new CustomError(403, message);
   }
 
   static notFound(message: string): CustomError {
-    return new CustomError(message, 404);
+    return new CustomError(404, message);
   }
 
   static internalServerError(message: string): CustomError {
-    return new CustomError(message, 500);
+    return new CustomError(500, message);
   }
 }

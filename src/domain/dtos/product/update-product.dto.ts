@@ -1,5 +1,5 @@
 export class UpdateProductDto {
-  constructor(
+  private constructor(
     public readonly _id: string,
     public readonly id: string,
     public readonly name?: string,

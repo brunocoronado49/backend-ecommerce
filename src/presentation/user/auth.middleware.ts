@@ -21,12 +21,24 @@ export class AuthMiddleware {
       const user = await UserModel.findById(payload.id);
       if (!user) return res.status(401).json({ error: 'Invalid token/user' });
 
-      req.body.user = UserEntity.fromObject(user);
+      (req as any).user = UserEntity.fromObject(user);
 
       next();
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: 'Internal server error' });
     }
+  }
+
+  public static async isSeller(req: Request, res: Response, next: NextFunction) {
+    const user = (req as any).user;
+
+    if (!user) return res.status(500).json({ error: 'Internal server error: user not found' });
+
+    if (!user.role.includes('SELLER_ROLE')) {
+      return res.status(401).json({ error: 'User is not authorized to perform this action' });
+    }
+
+    next();
   }
 }

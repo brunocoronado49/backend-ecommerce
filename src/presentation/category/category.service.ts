@@ -11,14 +11,14 @@ import {
 export class CategoryService {
   constructor() {}
 
-  public createCategory = async (createCategoryDto: CreateCategoryDto, user: UserEntity) => {
+  public createCategory = async (createCategoryDto: CreateCategoryDto, seller: UserEntity) => {
     const categoryExists = await CategoryModel.findOne({ name: createCategoryDto.name });
     if (categoryExists) throw CustomError.badRequest('Category already exists');
 
     try {
       const category = new CategoryModel({
         ...createCategoryDto,
-        user: user.id,
+        seller: seller.id,
       });
 
       await category.save();
@@ -28,7 +28,9 @@ export class CategoryService {
         name: category.name,
         available: category.available,
       };
-    } catch (error) {}
+    } catch (error) {
+      throw CustomError.internalServerError(`${error}`);
+    }
   };
 
   public updateCategory = async (updateCategoryDto: UpdateCategoryDto) => {
@@ -40,7 +42,7 @@ export class CategoryService {
         updateCategoryDto.id,
         updateCategoryDto.value,
         { new: true }
-      );
+      ).populate('seller', 'fullName email');
 
       return updatedCategory;
     } catch (error) {
@@ -56,21 +58,19 @@ export class CategoryService {
       await CategoryModel.findByIdAndDelete(deleteCategoryDto.id);
       return {
         categoryId: deleteCategoryDto.id,
+        category: category.name,
         message: 'Category deleted successfully',
       };
-    } catch (error) {}
+    } catch (error) {
+      throw CustomError.internalServerError(`${error}`);
+    }
   };
 
   public getCategoryById = async (id: string) => {
     const category = await CategoryModel.findById(id);
     if (!category) throw CustomError.notFound('Category not found');
 
-    return {
-      id: category.id,
-      name: category.name,
-      available: category.available,
-      userId: category.seller,
-    };
+    return category;
   };
 
   public getCategories = async (paginationDto: PaginationDto) => {
@@ -81,6 +81,7 @@ export class CategoryService {
         CategoryModel.countDocuments(),
         CategoryModel.find()
           .skip((page - 1) * limit)
+          .populate('seller', 'fullName email')
           .limit(limit),
       ]);
 
@@ -93,6 +94,7 @@ export class CategoryService {
             id: category.id,
             name: category.name,
             available: category.available,
+            seller: category.seller,
           };
         }),
       };

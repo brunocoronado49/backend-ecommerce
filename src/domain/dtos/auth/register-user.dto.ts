@@ -5,11 +5,12 @@ export class RegisterUserDto {
     public readonly fullName: string,
     public readonly username: string,
     public readonly email: string,
-    public readonly password: string
+    public readonly password: string,
+    public readonly role: string[]
   ) {}
 
   static create(object: { [key: string]: any }): [string?, RegisterUserDto?] {
-    const { fullName, username, email, password } = object;
+    const { fullName, username, email, password, role = ['USER_ROLE'] } = object;
 
     if (!fullName) return ['Missing full name'];
     if (!username) return ['Missing username'];
@@ -20,6 +21,8 @@ export class RegisterUserDto {
     if (!password) return ['Missing password'];
     if (password.length < 6) return ['Password too short'];
 
-    return [undefined!, new RegisterUserDto(fullName, username, email, password)];
+    if (!Array.isArray(role)) return ['Role must be an array of strings'];
+
+    return [undefined!, new RegisterUserDto(fullName, username, email, password, role)];
   }
 }

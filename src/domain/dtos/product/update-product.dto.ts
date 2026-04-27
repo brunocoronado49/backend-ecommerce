@@ -1,6 +1,5 @@
 export class UpdateProductDto {
   private constructor(
-    public readonly _id: string,
     public readonly id: string,
     public readonly name?: string,
     public readonly stock?: number,
@@ -21,7 +20,7 @@ export class UpdateProductDto {
     if (this.available != undefined) returnObj.available = this.available;
     if (this.price) returnObj.price = this.price;
     if (this.description) returnObj.description = this.description;
-    if (this.seller) returnObj.price = this.seller;
+    if (this.seller) returnObj.seller = this.seller;
     if (this.category) returnObj.category = this.category;
 
     return returnObj;
@@ -29,9 +28,10 @@ export class UpdateProductDto {
 
   static create(object: { [key: string]: any }): [string?, UpdateProductDto?] {
     const { _id, id, name, stock, available, price, description, seller, category } = object;
+    const finalId = _id || id;
     let avaiableBoolean = available;
 
-    if (!id || !_id) return ['ID is required'];
+    if (!finalId) return ['ID is required'];
 
     if (available !== undefined && typeof available != 'boolean') {
       avaiableBoolean = available === 'true';
@@ -39,17 +39,7 @@ export class UpdateProductDto {
 
     return [
       undefined!,
-      new UpdateProductDto(
-        _id,
-        id,
-        name,
-        stock,
-        avaiableBoolean,
-        price,
-        description,
-        seller,
-        category
-      ),
+      new UpdateProductDto(id, name, stock, avaiableBoolean, price, description, seller, category),
     ];
   }
 }

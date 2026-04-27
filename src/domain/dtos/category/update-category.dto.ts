@@ -1,6 +1,5 @@
 export class UpdateCategoryDto {
   private constructor(
-    public readonly _id: string,
     public readonly id: string,
     public readonly name?: string,
     public readonly available?: boolean
@@ -18,15 +17,18 @@ export class UpdateCategoryDto {
   }
 
   static create(object: { [key: string]: any }): [string?, UpdateCategoryDto?] {
+    if (!object) return ['Payload is missing'];
+
     const { _id, id, name, available } = object;
+    const finalId = _id || id;
     let avaiableBoolean = available;
 
-    if (!id || !_id) return ['ID is required'];
+    if (!finalId) return ['ID is required'];
 
     if (available !== undefined && typeof available != 'boolean') {
       avaiableBoolean = available === 'true';
     }
 
-    return [undefined!, new UpdateCategoryDto(id, _id, name, avaiableBoolean)];
+    return [undefined!, new UpdateCategoryDto(id, name, avaiableBoolean)];
   }
 }

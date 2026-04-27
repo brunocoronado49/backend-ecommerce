@@ -5,6 +5,8 @@ export class CreateCategoryDto {
   ) {}
 
   static create(object: { [key: string]: any }): [string?, CreateCategoryDto?] {
+    if (!object) return ['Missing payload'];
+
     const { name, available } = object;
     let avaiableBoolean = available;
 

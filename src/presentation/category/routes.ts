@@ -12,10 +12,10 @@ export class CategoryRoutes {
     router.use(AuthMiddleware.validateJWT);
 
     router.get('/', categoryController.getCategories);
-    router.post('/', categoryController.createCategory);
     router.get('/:id', categoryController.getCategoryById);
-    router.put('/:id', categoryController.updateCategory);
-    router.delete('/:id', categoryController.deleteCategory);
+    router.post('/', [AuthMiddleware.isSeller], categoryController.createCategory);
+    router.put('/:id', [AuthMiddleware.isSeller], categoryController.updateCategory);
+    router.delete('/:id', [AuthMiddleware.isSeller], categoryController.deleteCategory);
 
     return router;
   }

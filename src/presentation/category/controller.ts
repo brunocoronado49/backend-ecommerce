@@ -17,8 +17,8 @@ export class CategoryController {
     if (error) return res.status(400).json({ error });
 
     this.categoryService
-      .createCategory(createCategoryDto!, req.body.user)
-      .then(category => res.status(201).json({ category }))
+      .createCategory(createCategoryDto!, (req as any).user)
+      .then(category => res.status(201).json(category))
       .catch(error => HandleErrorController.handleError(error, res));
   };
 
@@ -30,7 +30,7 @@ export class CategoryController {
 
     this.categoryService
       .updateCategory(updateCategoryDto!)
-      .then(updatedCategory => res.status(200).json({ updateCategoryDto }))
+      .then(updatedCategory => res.status(200).json(updatedCategory))
       .catch(error => HandleErrorController.handleError(error, res));
   };
 

@@ -5,3 +5,6 @@ export * from './user/auth.service';
 export * from './user/controller';
 export * from './user/email.service';
 export * from './user/routes';
+export * from './category/category.service';
+export * from './category/controller';
+export * from './category/routes';

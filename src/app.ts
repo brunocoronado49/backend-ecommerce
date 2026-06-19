@@ -8,13 +8,13 @@ import { Server, AppRoutes } from './presentation';
 
 // Initial point of application
 async function main() {
-  // Create the connection to database
+  // Create the database connection
   await MongoDatabase.connect({
     mongoUrl: envs.MONGO_URL,
     dbName: envs.MONGODB_NAME,
   });
 
-  // Initialization of server express
+  // Server express initialization
   const server = new Server({
     port: envs.PORT,
     router: AppRoutes.routes,

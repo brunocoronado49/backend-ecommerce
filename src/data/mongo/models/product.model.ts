@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import { availableParallelism } from 'node:os';
 
 const productSchema = new mongoose.Schema({
   name: {
